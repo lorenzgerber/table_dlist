@@ -37,7 +37,7 @@ Usage exept those listed above requires permission by the author.
 #include <sys/time.h>
 
 // Size of the table to generate
-#define TABLESIZE 5000
+#define TABLESIZE 250
 #define SAMPLESIZE TABLESIZE*2
 
 /* Helper function to allocate memory for and initialize a integer pointer
@@ -125,6 +125,12 @@ void getInsertSpeed(Table *table, int *keys, int *values){
   }
   end =  get_milliseconds();
   printf("%lu ms.\n",end-start);
+
+  // write to file for benchmarking
+  FILE *f = fopen("benchmark.txt", "a");
+  fprintf(f, "%lu", end-start);
+  fprintf(f, "\t");
+  fclose(f);
 }
 
 /* Measures time taken to do n lookups of existing keys in a table
@@ -147,6 +153,12 @@ void getRandomExistingLookupSpeed(Table *table, int *keys, int n){
   }
   end = get_milliseconds();
   printf("%lu ms.\n", end-start);
+
+  // write to file for benchmarking
+  FILE *f = fopen("benchmark.txt", "a");
+  fprintf(f, "%lu", end-start);
+  fprintf(f, "\t");
+  fclose(f);
 }
 
 /* Measures time taken to do n lookups of non-existing keys in a table
@@ -170,6 +182,12 @@ void getRandomNonExistingLookupSpeed(Table *table, int *keys, int n){
   }
   end = get_milliseconds();
   printf("%lu ms.\n" ,end-start);
+
+  // write to file for benchmarking
+  FILE *f = fopen("benchmark.txt", "a");
+  fprintf(f, "%lu", end-start);
+  fprintf(f, "\t");
+  fclose(f);
 }
 
 /* Measures time taken to do n lookups of existing keys in a table when the
@@ -197,6 +215,12 @@ void getSkewedLookupSpeed(Table *table, int *keys, int n){
   }
   end = get_milliseconds();
   printf("%lu ms.\n" ,end-start);
+
+  // write to file for benchmarking
+  FILE *f = fopen("benchmark.txt", "a");
+  fprintf(f, "%lu", end-start);
+  fprintf(f, "\t");
+  fclose(f);
 }
 
 /* Measures time taken remove all keys from a table
@@ -217,6 +241,13 @@ void getRemoveSpeed(Table *table, int *keys){
   }
   end = get_milliseconds();
   printf("%lu ms.\n" ,end-start);
+
+  // write to file for benchmarking
+  FILE *f = fopen("benchmark.txt", "a");
+  fprintf(f, "%lu", end-start);
+  fprintf(f, "\n");
+  fclose(f);
+
 }
 
 /* Tests if isempty returns true directly after a table is created.
@@ -490,10 +521,12 @@ void speedTest() {
 }
 
 int main() {
-  correctnessTest();
-  printf("All correctness tests succeeded! Press enter to continue!\n");
-  getchar();
-  speedTest();
-  printf("Test completed.\n");
+  //correctnessTest();
+  //printf("All correctness tests succeeded! Press enter to continue!\n");
+  //getchar();
+  for (int i = 0; i < 50; i++) {
+    speedTest();
+  }
+  //printf("Test completed.\n");
   return 0;
 }
